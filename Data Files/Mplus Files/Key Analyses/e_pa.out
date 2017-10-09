@@ -1,0 +1,621 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+01/21/2016  10:04 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:      Do E & PA co-vary within-person?
+
+  DATA:       FILE IS epa_example.csv; ! Name of the file
+
+  VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+  			! Variable names for each column of the .csv file
+  			! extrav = trait E
+  			! est, past, powst, contst are centred state measures of extraversion, PA, power
+  			! & contribution
+  			! timeel = standardised time elapsed since participant's first report
+  			! social & semi are effect coded variables for situational effects
+
+              MISSING ARE *;
+
+              ! Set missing value here. If it's an asterix, you're done.
+              ! But you can also change it to for example, (-99)
+
+              USEVARIABLES ARE id timeel est past social semi;
+
+              ! Variables being used in the analysis
+
+              WITHIN ARE est past timeel social semi;
+
+  			! Within-person variables
+
+              CLUSTER = id;
+             	
+             	! Clustering variable; in this case, the participant
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+  MODEL:      %WITHIN%
+              s | past on est; ! regress state PA on state extraversion
+
+              ! s denotes the slope, but you can name this anything.
+              ! | means model the slope so it has a mean & variance (i.e., random slope).
+
+              past ON timeel social semi; ! control for timecourse and situation
+
+  OUTPUT:     TECH1 TECH8 CINTERVAL;
+
+
+
+*** WARNING in MODEL command
+  Variable on the left-hand side of an ON statement in a | statement is a
+  WITHIN variable.  The intercept for this variable is not random.
+  Variable:  PAST
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Do E & PA co-vary within-person?
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Continuous
+   PAST
+
+Observed independent variables
+   TIMEEL      EST         SOCIAL      SEMI
+
+Continuous latent variables
+   S
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   TIMEEL      EST         PAST        SOCIAL      SEMI
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_example.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST           1.000
+ TIMEEL         1.000         1.000
+ EST            1.000         1.000         1.000
+ SOCIAL         1.000         1.000         1.000         1.000
+ SEMI           1.000         1.000         1.000         1.000         1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        7
+
+Loglikelihood
+
+          H0 Value                       -3036.726
+
+Information Criteria
+
+          Akaike (AIC)                    6087.452
+          Bayesian (BIC)                  6126.078
+          Sample-Size Adjusted BIC        6103.839
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ PAST       ON
+    TIMEEL             0.006      0.029      0.202      0.840
+    SOCIAL            -0.032      0.053     -0.599      0.549
+    SEMI              -0.080      0.044     -1.835      0.066
+
+ Intercepts
+    PAST               0.002      0.029      0.081      0.935
+
+ Residual Variances
+    PAST               1.529      0.051     29.863      0.000
+
+Between Level
+
+ Means
+    S                  0.457      0.030     15.363      0.000
+
+ Variances
+    S                  0.027      0.007      3.655      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.218E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ PAST     ON
+    TIMEEL          -0.070      -0.052      -0.042       0.006       0.054       0.063       0.081
+    SOCIAL          -0.168      -0.136      -0.119      -0.032       0.055       0.072       0.105
+    SEMI            -0.193      -0.166      -0.152      -0.080      -0.008       0.005       0.032
+
+ Intercepts
+    PAST            -0.073      -0.055      -0.046       0.002       0.050       0.060       0.077
+
+ Residual Variances
+    PAST             1.398       1.429       1.445       1.529       1.614       1.630       1.661
+
+Between Level
+
+ Means
+    S                0.381       0.399       0.408       0.457       0.506       0.516       0.534
+
+ Variances
+    S                0.008       0.013       0.015       0.027       0.039       0.042       0.046
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           LAMBDA
+              SEMI
+              ________
+ PAST               0
+ TIMEEL             0
+ EST                0
+ SOCIAL             0
+ SEMI               0
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST               0
+ TIMEEL             0             0
+ EST                0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  0             1             0             0             0
+
+
+           ALPHA
+              SEMI
+              ________
+ 1                  0
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  0             0             0             0             0
+ PAST               0             0             2             0             3
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           BETA
+              SEMI
+              ________
+ S                  0
+ PAST               4
+ TIMEEL             0
+ EST                0
+ SOCIAL             0
+ SEMI               0
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  0
+ PAST               0             5
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           PSI
+              SEMI
+              ________
+ SEMI               0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           LAMBDA
+              SEMI
+              ________
+ PAST               0
+ TIMEEL             0
+ EST                0
+ SOCIAL             0
+ SEMI               0
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST               0
+ TIMEEL             0             0
+ EST                0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  6             0             0             0             0
+
+
+           ALPHA
+              SEMI
+              ________
+ 1                  0
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  0             0             0             0             0
+ PAST               0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           BETA
+              SEMI
+              ________
+ S                  0
+ PAST               0
+ TIMEEL             0
+ EST                0
+ SOCIAL             0
+ SEMI               0
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  7
+ PAST               0             0
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           PSI
+              SEMI
+              ________
+ SEMI               0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000         1.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         1.000         0.000         0.000
+ EST            0.000         0.000         0.000         1.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         1.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              SEMI
+              ________
+ PAST           0.000
+ TIMEEL         0.000
+ EST            0.000
+ SOCIAL         0.000
+ SEMI           1.000
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              SEMI
+              ________
+ 1              0.000
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              SEMI
+              ________
+ S              0.000
+ PAST           0.000
+ TIMEEL         0.000
+ EST            0.000
+ SOCIAL         0.000
+ SEMI           0.000
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              0.000
+ PAST           0.000         1.227
+ TIMEEL         0.000         0.000         0.500
+ EST            0.000         0.000         0.000         2.034
+ SOCIAL         0.000         0.000         0.000         0.000         0.345
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              SEMI
+              ________
+ SEMI           0.305
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000         1.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         1.000         0.000         0.000
+ EST            0.000         0.000         0.000         1.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         1.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              SEMI
+              ________
+ PAST           0.000
+ TIMEEL         0.000
+ EST            0.000
+ SOCIAL         0.000
+ SEMI           1.000
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              SEMI
+              ________
+ 1              0.000
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              SEMI
+              ________
+ S              0.000
+ PAST           0.000
+ TIMEEL         0.000
+ EST            0.000
+ SOCIAL         0.000
+ SEMI           0.000
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              1.000
+ PAST           0.000         0.000
+ TIMEEL         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              SEMI
+              ________
+ SEMI           0.000
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.31374756D+04    0.0000000    0.0000000  EM
+              2 -0.30411087D+04   96.3668649    0.0307148  EM
+              3 -0.30377132D+04    3.3955035    0.0011165  EM
+              4 -0.30370015D+04    0.7117616    0.0002343  EM
+              5 -0.30368106D+04    0.1908555    0.0000628  EM
+              6 -0.30367534D+04    0.0572539    0.0000189  EM
+              7 -0.30367351D+04    0.0182596    0.0000060  EM
+              8 -0.30367291D+04    0.0060502    0.0000020  EM
+              9 -0.30367270D+04    0.0020605    0.0000007  EM
+             10 -0.30367263D+04    0.0007177    0.0000002  EM
+             11 -0.30367260D+04    0.0002550    0.0000001  EM
+             12 -0.30367259D+04    0.0000926    0.0000000  EM
+             13 -0.30367259D+04    0.0000343    0.0000000  EM
+             14 -0.30367259D+04    0.0000129    0.0000000  EM
+             15 -0.30367259D+04    0.0000050    0.0000000  EM
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  10:04:03
+        Ending Time:  10:04:03
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

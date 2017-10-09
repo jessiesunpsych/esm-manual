@@ -1,0 +1,52 @@
+TITLE:    Extraversion reliability;
+
+! Syntax adapted from Bolger & Laurenceau (2013, p. 139)
+
+DATA:     FILE IS epa_items.csv;
+VARIABLE: NAMES ARE id obs ex1 ex2 ex3 ex4 ex5 ex6
+pa1 pa2 pa3 pow1 pow2 cont1 cont2 cont3;
+
+! Variable names for each column of the .csv file
+
+USEVAR = ex1 ex2 ex3 ex4 ex5 ex6 obs;
+
+! Variables used in this analysis
+
+WITHIN = obs;
+CLUSTER = id;
+missing are *;
+ANALYSIS: TYPE = TWOLEVEL ;
+PROCESSORS=4;
+MODEL:    %WITHIN%
+            Ew by
+          ex1 * (a)
+          ex2 ex3 ex4 ex5 ex6 (b-f);
+          
+! Ew is the name of the within-person extraversion factor
+! ex1* specifies that the extraversion Item 1 loads on Ew with a loading that is estimated from the data
+! and assigned the label of a
+! (These labels (a,b,c, etc.) are used in the calculation of coefficient omega below)
+! ex2 ex3 ex4 ex5 ex6 (b-f) specifies that items 2-6 load on the Ew factor
+          
+          ex1 ex2 ex3 ex4 ex5 ex6 (g-l);
+        
+! Gives labels g, h, i, j, k, l to the error variances of Items 1, 2, 3, 4, 5, 6 respectively
+
+          Ew@1; ! fixes the variance of the factor to be 1.0
+          
+          ex1 ex2 ex3 ex4 ex5 ex6 on obs;
+          
+          %BETWEEN%
+            Eb by
+            ex1*
+            ex2 ex3 ex4 ex5 ex6;
+            Eb@1;
+            ex1 ex2 ex3 ex4 ex5 ex6 ;
+            
+          MODEL CONSTRAINT:
+            new (omega);
+            omega=((a+b+c+d+e+f)**2)/((a+b+c+d+e+f)**2 + (g+h+i+j+k+l));
+            
+! Uses estimates of the labeled parameters to calculate omega for the within-person part of the model
+            
+OUTPUT:   sampstat;

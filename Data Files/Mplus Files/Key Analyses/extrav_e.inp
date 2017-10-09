@@ -1,0 +1,27 @@
+TITLE:      Does trait extraversion predict extraverted states across the week?
+
+DATA:       FILE IS epa_example.csv;
+
+VARIABLE:    NAMES ARE id zextrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+            MISSING ARE *;
+
+            USEVARIABLES ARE id extrav e;
+
+            BETWEEN ARE extrav; ! identify variables with only between variance
+            ! variables that are not specified as between or within can have both
+            ! between and within variance
+
+            CLUSTER = id;
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+MODEL:      %WITHIN%
+            e; ! estimate level 1 residual variance
+       
+            %BETWEEN%
+            extrav; ! estimate level 2 residual variance
+            e ON extrav;
+
+OUTPUT:     TECH1 TECH8 CINTERVAL;

@@ -1,0 +1,1028 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+01/21/2016  10:04 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:      Does State Social Power Mediate the State E-PA Relation?
+
+  ! Syntax adapted from Bolger & Laurenceau (2013, p. 188)
+
+  DATA:       FILE IS epa_example.csv; ! Name of the file
+
+  VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+              MISSING ARE *;
+
+                  USEVARIABLES ARE id timeel est past powst social semi;
+
+                  WITHIN = est powst past timeel social semi;
+
+                  CLUSTER = id;
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+   MODEL:    %WITHIN%
+             a | powst on est; ! regressing M on X, call the random slope "a"
+             b| past on powst; ! regressing Y on M, call the random slope "b"
+             cp| past on est; ! regressing Y on X, call the random slope "cp"
+   		   past powst ON timeel social semi; ! time & situational covariates
+   		   [powst@0 past@0]; ! fix the intercept to 0, as both were subject-mean centred
+         	
+             %BETWEEN%
+             cp WITH a b; ! covariances of the cp random effect w/ a & b random effects
+             [a] (ma); a (vara); ! label the mean & variance of the a slope random effect
+             [b] (mb); b (varb); ! label the mean & variance of the b slope random effect
+             [cp] (mcp); ! labels mean of cp slope
+             a WITH b (covab); ! labels the covariance of a & b random effects as "covab"
+
+             MODEL CONSTRAINT:
+             NEW(med te pme corr); ! creating new variables
+             med=ma*mb+covab; ! mediated (indirect) effect
+             te=med+mcp; ! total effect
+             pme=med/te; ! percent mediated effect
+             corr=covab/sqrt(vara*varb); ! covariance of a & b random effects in correlation
+
+   OUTPUT:    TECH1 TECH8 CINTERVAL;
+
+
+
+*** WARNING in MODEL command
+  Variable on the left-hand side of an ON statement in a | statement is a
+  WITHIN variable.  The intercept for this variable is not random.
+  Variable:  POWST
+*** WARNING in MODEL command
+  Variable on the left-hand side of an ON statement in a | statement is a
+  WITHIN variable.  The intercept for this variable is not random.
+  Variable:  PAST
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Does State Social Power Mediate the State E-PA Relation?
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    2
+Number of independent variables                                  4
+Number of continuous latent variables                            3
+
+Observed dependent variables
+
+  Continuous
+   PAST        POWST
+
+Observed independent variables
+   TIMEEL      EST         SOCIAL      SEMI
+
+Continuous latent variables
+   A           B           CP
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   TIMEEL      EST         PAST        POWST       SOCIAL      SEMI
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_example.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           1.000
+ POWST          1.000         1.000
+ TIMEEL         1.000         1.000         1.000
+ EST            1.000         1.000         1.000         1.000
+ SOCIAL         1.000         1.000         1.000         1.000         1.000
+ SEMI           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              SEMI
+              ________
+ SEMI           1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       17
+
+Loglikelihood
+
+          H0 Value                       -6286.767
+
+Information Criteria
+
+          Akaike (AIC)                   12607.534
+          Bayesian (BIC)                 12701.341
+          Sample-Size Adjusted BIC       12647.333
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ PAST       ON
+    TIMEEL             0.009      0.029      0.312      0.755
+    SOCIAL            -0.037      0.052     -0.720      0.471
+    SEMI              -0.087      0.043     -2.024      0.043
+
+ POWST      ON
+    TIMEEL             0.045      0.033      1.343      0.179
+    SOCIAL             0.118      0.059      1.982      0.047
+    SEMI               0.061      0.049      1.227      0.220
+
+ Intercepts
+    PAST               0.000      0.000    999.000    999.000
+    POWST              0.000      0.000    999.000    999.000
+
+ Residual Variances
+    PAST               1.491      0.050     29.548      0.000
+    POWST              1.949      0.065     29.847      0.000
+
+Between Level
+
+ CP       WITH
+    A                  0.007      0.007      0.930      0.352
+    B                  0.004      0.005      0.764      0.445
+
+ A        WITH
+    B                 -0.016      0.008     -2.064      0.039
+
+ Means
+    A                  0.655      0.039     16.753      0.000
+    B                  0.111      0.025      4.396      0.000
+    CP                 0.399      0.029     13.596      0.000
+
+ Variances
+    A                  0.058      0.014      4.171      0.000
+    B                  0.010      0.007      1.443      0.149
+    CP                 0.014      0.007      2.035      0.042
+
+New/Additional Parameters
+    MED                0.057      0.017      3.330      0.001
+    TE                 0.456      0.029     15.746      0.000
+    PME                0.125      0.036      3.454      0.001
+    CORR              -0.656      0.283     -2.318      0.020
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.158E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ PAST     ON
+    TIMEEL          -0.066      -0.048      -0.039       0.009       0.057       0.066       0.084
+    SOCIAL          -0.171      -0.139      -0.123      -0.037       0.048       0.064       0.096
+    SEMI            -0.198      -0.172      -0.158      -0.087      -0.016      -0.003       0.024
+
+ POWST    ON
+    TIMEEL          -0.041      -0.020      -0.010       0.045       0.099       0.109       0.130
+    SOCIAL          -0.035       0.001       0.020       0.118       0.216       0.234       0.271
+    SEMI            -0.067      -0.036      -0.021       0.061       0.142       0.158       0.188
+
+ Intercepts
+    PAST             0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    POWST            0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Residual Variances
+    PAST             1.361       1.392       1.408       1.491       1.574       1.590       1.621
+    POWST            1.781       1.821       1.841       1.949       2.056       2.077       2.117
+
+Between Level
+
+ CP       WITH
+    A               -0.012      -0.008      -0.005       0.007       0.019       0.022       0.026
+    B               -0.010      -0.006      -0.005       0.004       0.013       0.014       0.018
+
+ A        WITH
+    B               -0.036      -0.031      -0.029      -0.016      -0.003      -0.001       0.004
+
+ Means
+    A                0.555       0.579       0.591       0.655       0.720       0.732       0.756
+    B                0.046       0.062       0.070       0.111       0.153       0.161       0.177
+    CP               0.323       0.341       0.350       0.399       0.447       0.456       0.474
+
+ Variances
+    A                0.022       0.031       0.035       0.058       0.081       0.086       0.094
+    B               -0.008      -0.004      -0.001       0.010       0.022       0.024       0.029
+    CP              -0.004       0.001       0.003       0.014       0.026       0.028       0.032
+
+New/Additional Parameters
+    MED              0.013       0.023       0.029       0.057       0.085       0.091       0.101
+    TE               0.381       0.399       0.408       0.456       0.503       0.512       0.530
+    PME              0.032       0.054       0.066       0.125       0.185       0.196       0.218
+    CORR            -1.384      -1.210      -1.121      -0.656      -0.190      -0.101       0.073
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              SEMI
+              ________
+ 1                  0
+
+
+           LAMBDA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ POWST              0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST               0             0             0             0
+ POWST              0             0             0             0
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           THETA
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0
+ POWST              0             0
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           THETA
+              SEMI
+              ________
+ SEMI               0
+
+
+           ALPHA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A                  0             0             0             0             0
+ B                  0             0             0             0             0
+ CP                 0             0             0             0             0
+ PAST               0             0             0             0             0
+ POWST              0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A                  0             0             0             0
+ B                  0             0             0             0
+ CP                 0             0             0             0
+ PAST               1             0             2             3
+ POWST              4             0             5             6
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           PSI
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A                  0
+ B                  0             0
+ CP                 0             0             0
+ PAST               0             0             0             7
+ POWST              0             0             0             0             8
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL             0
+ EST                0             0
+ SOCIAL             0             0             0
+ SEMI               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              SEMI
+              ________
+ 1                  0
+
+
+           LAMBDA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ POWST              0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST               0             0             0             0
+ POWST              0             0             0             0
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           THETA
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0
+ POWST              0             0
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           THETA
+              SEMI
+              ________
+ SEMI               0
+
+
+           ALPHA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ 1                  9            10            11             0             0
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A                  0             0             0             0             0
+ B                  0             0             0             0             0
+ CP                 0             0             0             0             0
+ PAST               0             0             0             0             0
+ POWST              0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A                  0             0             0             0
+ B                  0             0             0             0
+ CP                 0             0             0             0
+ PAST               0             0             0             0
+ POWST              0             0             0             0
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           PSI
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A                 12
+ B                 13            14
+ CP                15            16            17
+ PAST               0             0             0             0
+ POWST              0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL             0
+ EST                0             0
+ SOCIAL             0             0             0
+ SEMI               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              MED           TE            PME           CORR
+              ________      ________      ________      ________
+ 1                 18            19            20            21
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              SEMI
+              ________
+ 1              0.000
+
+
+           LAMBDA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         1.000         0.000
+ POWST          0.000         0.000         0.000         0.000         1.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000
+ TIMEEL         1.000         0.000         0.000         0.000
+ EST            0.000         1.000         0.000         0.000
+ SOCIAL         0.000         0.000         1.000         0.000
+ SEMI           0.000         0.000         0.000         1.000
+
+
+           THETA
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ POWST          0.000         0.000
+ TIMEEL         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              SEMI
+              ________
+ SEMI           0.000
+
+
+           ALPHA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000
+
+
+           PSI
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A              0.000
+ B              0.000         0.000
+ CP             0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         1.227
+ POWST          0.000         0.000         0.000         0.000         2.099
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL         0.500
+ EST            0.000         2.034
+ SOCIAL         0.000         0.000         0.345
+ SEMI           0.000         0.000         0.000         0.305
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              SEMI
+              ________
+ 1              0.000
+
+
+           LAMBDA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         1.000         0.000
+ POWST          0.000         0.000         0.000         0.000         1.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000
+ TIMEEL         1.000         0.000         0.000         0.000
+ EST            0.000         1.000         0.000         0.000
+ SOCIAL         0.000         0.000         1.000         0.000
+ SEMI           0.000         0.000         0.000         1.000
+
+
+           THETA
+              PAST          POWST         TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ POWST          0.000         0.000
+ TIMEEL         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              SEMI
+              ________
+ SEMI           0.000
+
+
+           ALPHA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000
+
+
+           PSI
+              A             B             CP            PAST          POWST
+              ________      ________      ________      ________      ________
+ A              1.000
+ B              0.000         1.000
+ CP             0.000         0.000         1.000
+ PAST           0.000         0.000         0.000         0.000
+ POWST          0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL         0.000
+ EST            0.000         0.000
+ SOCIAL         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              MED           TE            PME           CORR
+              ________      ________      ________      ________
+ 1              0.500         0.500         0.500         0.500
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.65306758D+04    0.0000000    0.0000000  EM
+              2 -0.63133106D+04  217.3651764    0.0332837  EM
+              3 -0.62979016D+04   15.4089939    0.0024407  EM
+              4 -0.62933020D+04    4.5996203    0.0007303  EM
+              5 -0.62913021D+04    1.9999152    0.0003178  EM
+              6 -0.62902183D+04    1.0837183    0.0001723  EM
+              7 -0.62895422D+04    0.6761900    0.0001075  EM
+              8 -0.62890791D+04    0.4630835    0.0000736  EM
+              9 -0.62887412D+04    0.3378429    0.0000537  EM
+             10 -0.62884835D+04    0.2576844    0.0000410  EM
+             11 -0.62882805D+04    0.2030510    0.0000323  EM
+             12 -0.62881165D+04    0.1640319    0.0000261  EM
+             13 -0.62879813D+04    0.1351524    0.0000215  EM
+             14 -0.62878681D+04    0.1131723    0.0000180  EM
+             15 -0.62877721D+04    0.0960611    0.0000153  EM
+             16 -0.62876896D+04    0.0824876    0.0000131  EM
+             17 -0.62876180D+04    0.0715499    0.0000114  EM
+             18 -0.62875554D+04    0.0626116    0.0000100  EM
+             19 -0.62875002D+04    0.0552192    0.0000088  EM
+             20 -0.62874512D+04    0.0490393    0.0000078  EM
+             21 -0.62874073D+04    0.0438242    0.0000070  EM
+             22 -0.62873680D+04    0.0393844    0.0000063  EM
+             23 -0.62873324D+04    0.0355754    0.0000057  EM
+             24 -0.62873001D+04    0.0322844    0.0000051  EM
+             25 -0.62872707D+04    0.0294226    0.0000047  EM
+             26 -0.62872438D+04    0.0269192    0.0000043  EM
+             27 -0.62872190D+04    0.0247174    0.0000039  EM
+             28 -0.62871963D+04    0.0227711    0.0000036  EM
+             29 -0.62871752D+04    0.0210427    0.0000033  EM
+             30 -0.62871557D+04    0.0195011    0.0000031  EM
+             31 -0.62871376D+04    0.0181206    0.0000029  EM
+             32 -0.62871207D+04    0.0168797    0.0000027  EM
+             33 -0.62871050D+04    0.0157604    0.0000025  EM
+             34 -0.62870902D+04    0.0147475    0.0000023  EM
+             35 -0.62870764D+04    0.0138280    0.0000022  EM
+             36 -0.62870634D+04    0.0129908    0.0000021  EM
+             37 -0.62870512D+04    0.0122266    0.0000019  EM
+             38 -0.62870396D+04    0.0115272    0.0000018  EM
+             39 -0.62870288D+04    0.0108854    0.0000017  EM
+             40 -0.62870185D+04    0.0102952    0.0000016  EM
+             41 -0.62870087D+04    0.0097513    0.0000016  EM
+             42 -0.62869995D+04    0.0092489    0.0000015  EM
+             43 -0.62869907D+04    0.0087841    0.0000014  EM
+             44 -0.62869823D+04    0.0083531    0.0000013  EM
+             45 -0.62869744D+04    0.0079527    0.0000013  EM
+             46 -0.62869668D+04    0.0075803    0.0000012  EM
+             47 -0.62869596D+04    0.0072332    0.0000012  EM
+             48 -0.62869526D+04    0.0069092    0.0000011  EM
+             49 -0.62869460D+04    0.0066063    0.0000011  EM
+             50 -0.62869397D+04    0.0063228    0.0000010  EM
+             51 -0.62869337D+04    0.0060570    0.0000010  EM
+             52 -0.62869279D+04    0.0058075    0.0000009  EM
+             53 -0.62869223D+04    0.0055731    0.0000009  EM
+             54 -0.62869169D+04    0.0053524    0.0000009  EM
+             55 -0.62869118D+04    0.0051445    0.0000008  EM
+             56 -0.62869068D+04    0.0049485    0.0000008  EM
+             57 -0.62869021D+04    0.0047634    0.0000008  EM
+             58 -0.62868975D+04    0.0045884    0.0000007  EM
+             59 -0.62868931D+04    0.0044228    0.0000007  EM
+             60 -0.62868888D+04    0.0042660    0.0000007  EM
+             61 -0.62868847D+04    0.0041174    0.0000007  EM
+             62 -0.62868807D+04    0.0039764    0.0000006  EM
+             63 -0.62868769D+04    0.0038425    0.0000006  EM
+             64 -0.62868731D+04    0.0037152    0.0000006  EM
+             65 -0.62868695D+04    0.0035941    0.0000006  EM
+             66 -0.62868661D+04    0.0034788    0.0000006  EM
+             67 -0.62868627D+04    0.0033689    0.0000005  EM
+             68 -0.62868594D+04    0.0032642    0.0000005  EM
+             69 -0.62868563D+04    0.0031643    0.0000005  EM
+             70 -0.62868532D+04    0.0030688    0.0000005  EM
+             71 -0.62868502D+04    0.0029776    0.0000005  EM
+             72 -0.62868473D+04    0.0028905    0.0000005  EM
+             73 -0.62868445D+04    0.0028070    0.0000004  EM
+             74 -0.62868418D+04    0.0027272    0.0000004  EM
+             75 -0.62868392D+04    0.0026507    0.0000004  EM
+             76 -0.62868366D+04    0.0025774    0.0000004  EM
+             77 -0.62868341D+04    0.0025070    0.0000004  EM
+             78 -0.62868316D+04    0.0024395    0.0000004  EM
+             79 -0.62868293D+04    0.0023747    0.0000004  EM
+             80 -0.62868269D+04    0.0023125    0.0000004  EM
+             81 -0.62868247D+04    0.0022526    0.0000004  EM
+             82 -0.62868225D+04    0.0021951    0.0000003  EM
+             83 -0.62868204D+04    0.0021397    0.0000003  EM
+             84 -0.62868183D+04    0.0020865    0.0000003  EM
+             85 -0.62868162D+04    0.0020351    0.0000003  EM
+             86 -0.62868142D+04    0.0019857    0.0000003  EM
+             87 -0.62868123D+04    0.0019380    0.0000003  EM
+             88 -0.62868104D+04    0.0018920    0.0000003  EM
+             89 -0.62868086D+04    0.0018477    0.0000003  EM
+             90 -0.62868068D+04    0.0018049    0.0000003  EM
+             91 -0.62868050D+04    0.0017636    0.0000003  EM
+             92 -0.62868033D+04    0.0017236    0.0000003  EM
+             93 -0.62868016D+04    0.0016851    0.0000003  EM
+             94 -0.62867999D+04    0.0016478    0.0000003  EM
+             95 -0.62867983D+04    0.0016117    0.0000003  EM
+             96 -0.62867968D+04    0.0015768    0.0000003  EM
+             97 -0.62867952D+04    0.0015431    0.0000002  EM
+             98 -0.62867937D+04    0.0015103    0.0000002  EM
+             99 -0.62867922D+04    0.0014787    0.0000002  EM
+            100 -0.62867908D+04    0.0014480    0.0000002  EM
+            101 -0.62867894D+04    0.0014183    0.0000002  EM
+            102 -0.62867880D+04    0.0013895    0.0000002  EM
+            103 -0.62867866D+04    0.0013615    0.0000002  EM
+            104 -0.62867853D+04    0.0013344    0.0000002  EM
+            105 -0.62867840D+04    0.0013082    0.0000002  EM
+            106 -0.62867827D+04    0.0012826    0.0000002  EM
+            107 -0.62867814D+04    0.0012579    0.0000002  EM
+            108 -0.62867802D+04    0.0012338    0.0000002  EM
+            109 -0.62867790D+04    0.0012104    0.0000002  EM
+            110 -0.62867778D+04    0.0011877    0.0000002  EM
+            111 -0.62866517D+04    0.1261290    0.0000201  QN
+
+
+  THE OPTIMIZATION ALGORITHM HAS CHANGED TO THE EM ALGORITHM.
+
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.65306758D+04    0.0000000    0.0000000  EM
+              2 -0.63133106D+04  217.3651764    0.0332837  EM
+              3 -0.62979016D+04   15.4089939    0.0024407  EM
+              4 -0.62933020D+04    4.5996203    0.0007303  EM
+              5 -0.62913021D+04    1.9999152    0.0003178  EM
+              6 -0.62902183D+04    1.0837183    0.0001723  EM
+              7 -0.62895422D+04    0.6761900    0.0001075  EM
+              8 -0.62890791D+04    0.4630835    0.0000736  EM
+              9 -0.62887412D+04    0.3378429    0.0000537  EM
+             10 -0.62884835D+04    0.2576844    0.0000410  EM
+             11 -0.62882805D+04    0.2030510    0.0000323  EM
+             12 -0.62881165D+04    0.1640319    0.0000261  EM
+             13 -0.62879813D+04    0.1351524    0.0000215  EM
+             14 -0.62878681D+04    0.1131723    0.0000180  EM
+             15 -0.62877721D+04    0.0960611    0.0000153  EM
+             16 -0.62876896D+04    0.0824876    0.0000131  EM
+             17 -0.62876180D+04    0.0715499    0.0000114  EM
+             18 -0.62875554D+04    0.0626116    0.0000100  EM
+             19 -0.62875002D+04    0.0552192    0.0000088  EM
+             20 -0.62874512D+04    0.0490393    0.0000078  EM
+             21 -0.62874073D+04    0.0438242    0.0000070  EM
+             22 -0.62873680D+04    0.0393844    0.0000063  EM
+             23 -0.62873324D+04    0.0355754    0.0000057  EM
+             24 -0.62873001D+04    0.0322844    0.0000051  EM
+             25 -0.62872707D+04    0.0294226    0.0000047  EM
+             26 -0.62872438D+04    0.0269192    0.0000043  EM
+             27 -0.62872190D+04    0.0247174    0.0000039  EM
+             28 -0.62871963D+04    0.0227711    0.0000036  EM
+             29 -0.62871752D+04    0.0210427    0.0000033  EM
+             30 -0.62871557D+04    0.0195011    0.0000031  EM
+             31 -0.62871376D+04    0.0181206    0.0000029  EM
+             32 -0.62871207D+04    0.0168797    0.0000027  EM
+             33 -0.62871050D+04    0.0157604    0.0000025  EM
+             34 -0.62870902D+04    0.0147475    0.0000023  EM
+             35 -0.62870764D+04    0.0138280    0.0000022  EM
+             36 -0.62870634D+04    0.0129908    0.0000021  EM
+             37 -0.62870512D+04    0.0122266    0.0000019  EM
+             38 -0.62870396D+04    0.0115272    0.0000018  EM
+             39 -0.62870288D+04    0.0108854    0.0000017  EM
+             40 -0.62870185D+04    0.0102952    0.0000016  EM
+             41 -0.62870087D+04    0.0097513    0.0000016  EM
+             42 -0.62869995D+04    0.0092489    0.0000015  EM
+             43 -0.62869907D+04    0.0087841    0.0000014  EM
+             44 -0.62869823D+04    0.0083531    0.0000013  EM
+             45 -0.62869744D+04    0.0079527    0.0000013  EM
+             46 -0.62869668D+04    0.0075803    0.0000012  EM
+             47 -0.62869596D+04    0.0072332    0.0000012  EM
+             48 -0.62869526D+04    0.0069092    0.0000011  EM
+             49 -0.62869460D+04    0.0066063    0.0000011  EM
+             50 -0.62869397D+04    0.0063228    0.0000010  EM
+             51 -0.62869337D+04    0.0060570    0.0000010  EM
+             52 -0.62869279D+04    0.0058075    0.0000009  EM
+             53 -0.62869223D+04    0.0055731    0.0000009  EM
+             54 -0.62869169D+04    0.0053524    0.0000009  EM
+             55 -0.62869118D+04    0.0051445    0.0000008  EM
+             56 -0.62869068D+04    0.0049485    0.0000008  EM
+             57 -0.62869021D+04    0.0047634    0.0000008  EM
+             58 -0.62868975D+04    0.0045884    0.0000007  EM
+             59 -0.62868931D+04    0.0044228    0.0000007  EM
+             60 -0.62868888D+04    0.0042660    0.0000007  EM
+             61 -0.62868847D+04    0.0041174    0.0000007  EM
+             62 -0.62868807D+04    0.0039764    0.0000006  EM
+             63 -0.62868769D+04    0.0038425    0.0000006  EM
+             64 -0.62868731D+04    0.0037152    0.0000006  EM
+             65 -0.62868695D+04    0.0035941    0.0000006  EM
+             66 -0.62868661D+04    0.0034788    0.0000006  EM
+             67 -0.62868627D+04    0.0033689    0.0000005  EM
+             68 -0.62868594D+04    0.0032642    0.0000005  EM
+             69 -0.62868563D+04    0.0031643    0.0000005  EM
+             70 -0.62868532D+04    0.0030688    0.0000005  EM
+             71 -0.62868502D+04    0.0029776    0.0000005  EM
+             72 -0.62868473D+04    0.0028905    0.0000005  EM
+             73 -0.62868445D+04    0.0028070    0.0000004  EM
+             74 -0.62868418D+04    0.0027272    0.0000004  EM
+             75 -0.62868392D+04    0.0026507    0.0000004  EM
+             76 -0.62868366D+04    0.0025774    0.0000004  EM
+             77 -0.62868341D+04    0.0025070    0.0000004  EM
+             78 -0.62868316D+04    0.0024395    0.0000004  EM
+             79 -0.62868293D+04    0.0023747    0.0000004  EM
+             80 -0.62868269D+04    0.0023125    0.0000004  EM
+             81 -0.62868247D+04    0.0022526    0.0000004  EM
+             82 -0.62868225D+04    0.0021951    0.0000003  EM
+             83 -0.62868204D+04    0.0021397    0.0000003  EM
+             84 -0.62868183D+04    0.0020865    0.0000003  EM
+             85 -0.62868162D+04    0.0020351    0.0000003  EM
+             86 -0.62868142D+04    0.0019857    0.0000003  EM
+             87 -0.62868123D+04    0.0019380    0.0000003  EM
+             88 -0.62868104D+04    0.0018920    0.0000003  EM
+             89 -0.62868086D+04    0.0018477    0.0000003  EM
+             90 -0.62868068D+04    0.0018049    0.0000003  EM
+             91 -0.62868050D+04    0.0017635    0.0000003  EM
+             92 -0.62868033D+04    0.0017236    0.0000003  EM
+             93 -0.62868016D+04    0.0016851    0.0000003  EM
+             94 -0.62867999D+04    0.0016478    0.0000003  EM
+             95 -0.62867983D+04    0.0016117    0.0000003  EM
+             96 -0.62867968D+04    0.0015768    0.0000003  EM
+             97 -0.62867952D+04    0.0015430    0.0000002  EM
+             98 -0.62867937D+04    0.0015103    0.0000002  EM
+             99 -0.62867922D+04    0.0014787    0.0000002  EM
+            100 -0.62867908D+04    0.0014480    0.0000002  EM
+            101 -0.62867894D+04    0.0014183    0.0000002  EM
+            102 -0.62867880D+04    0.0013895    0.0000002  EM
+            103 -0.62867866D+04    0.0013616    0.0000002  EM
+            104 -0.62867853D+04    0.0013345    0.0000002  EM
+            105 -0.62867840D+04    0.0013082    0.0000002  EM
+            106 -0.62867827D+04    0.0012826    0.0000002  EM
+            107 -0.62867814D+04    0.0012579    0.0000002  EM
+            108 -0.62867802D+04    0.0012338    0.0000002  EM
+            109 -0.62867790D+04    0.0012104    0.0000002  EM
+            110 -0.62867778D+04    0.0011877    0.0000002  EM
+            111 -0.62867766D+04    0.0011656    0.0000002  EM
+            112 -0.62867755D+04    0.0011442    0.0000002  EM
+            113 -0.62867744D+04    0.0011233    0.0000002  EM
+            114 -0.62867733D+04    0.0011030    0.0000002  EM
+            115 -0.62867722D+04    0.0010832    0.0000002  EM
+            116 -0.62867711D+04    0.0010640    0.0000002  EM
+            117 -0.62867701D+04    0.0010453    0.0000002  EM
+            118 -0.62867690D+04    0.0010271    0.0000002  EM
+            119 -0.62867680D+04    0.0010093    0.0000002  EM
+            120 -0.62867670D+04    0.0009920    0.0000002  EM
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  10:04:21
+        Ending Time:  10:04:23
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

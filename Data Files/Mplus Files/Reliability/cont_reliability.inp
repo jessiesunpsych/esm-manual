@@ -1,0 +1,29 @@
+TITLE:    Contribution reliability;
+
+! Syntax adapted from Bolger & Laurenceau (2013, p. 139)
+
+DATA:     FILE IS epa_items.csv;
+VARIABLE: NAMES ARE id obs ex1 ex2 ex3 ex4 ex5 ex6
+pa1 pa2 pa3 pow1 pow2 cont1 cont2 cont3;
+USEVAR = cont1 cont2 cont3 obs;
+WITHIN = obs;
+CLUSTER = id;
+ANALYSIS: TYPE = TWOLEVEL ;
+PROCESSORS=4;
+MODEL:    %WITHIN%
+            Contw by
+          cont1* (a)
+          cont2 cont3 (b-c);
+          cont1 cont2 cont3 (d-f);
+          Contw@1;
+          cont1 cont2 cont3 on obs;
+          %BETWEEN%
+            Contb by
+            cont1*
+            cont2 cont3 ;
+            Contb@1;
+            cont1 cont2 cont3 ;
+          MODEL CONSTRAINT:
+            new (omega);
+            omega=((a+b+c)**2)/((a+b+c)**2 + (d+e+f));
+OUTPUT:   sampstat;

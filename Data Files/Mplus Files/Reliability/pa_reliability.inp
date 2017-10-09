@@ -1,0 +1,29 @@
+TITLE:    PA reliability;
+
+! Syntax adapted from Bolger & Laurenceau (2013, p. 139)
+
+DATA:     FILE IS epa_items.csv;
+VARIABLE: NAMES ARE id obs ex1 ex2 ex3 ex4 ex5 ex6
+pa1 pa2 pa3 pow1 pow2 cont1 cont2 cont3;
+USEVAR = pa1 pa2 pa3 obs;
+WITHIN = obs;
+CLUSTER = id;
+ANALYSIS: TYPE = TWOLEVEL ;
+PROCESSORS=4;
+MODEL:    %WITHIN%
+            PAw by
+          pa1* (a)
+          pa2 pa3 (b-c);
+          pa1 pa2 pa3 (d-f);
+          PAw@1;
+          pa1 pa2 pa3 on obs;
+          %BETWEEN%
+            PAb by
+            pa1*
+            pa2 pa3 ;
+            PAb@1;
+            pa1 pa2 pa3 ;
+          MODEL CONSTRAINT:
+            new (omega);
+            omega=((a+b+c)**2)/((a+b+c)**2 + (d+e+f));
+OUTPUT:   sampstat;

@@ -1,0 +1,332 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+06/14/2016  11:55 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:    PA reliability;
+
+  ! Syntax adapted from Bolger & Laurenceau (2013, p. 139)
+
+  DATA:     FILE IS epa_items.csv;
+  VARIABLE: NAMES ARE id obs ex1 ex2 ex3 ex4 ex5 ex6
+  pa1 pa2 pa3 pow1 pow2 cont1 cont2 cont3;
+  USEVAR = pa1 pa2 pa3 obs;
+  WITHIN = obs;
+  CLUSTER = id;
+  ANALYSIS: TYPE = TWOLEVEL ;
+  PROCESSORS=4;
+  MODEL:    %WITHIN%
+              PAw by
+            pa1* (a)
+            pa2 pa3 (b-c);
+            pa1 pa2 pa3 (d-f);
+            PAw@1;
+            pa1 pa2 pa3 on obs;
+            %BETWEEN%
+              PAb by
+              pa1*
+              pa2 pa3 ;
+              PAb@1;
+              pa1 pa2 pa3 ;
+            MODEL CONSTRAINT:
+              new (omega);
+              omega=((a+b+c)**2)/((a+b+c)**2 + (d+e+f));
+  OUTPUT:   sampstat;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+PA reliability;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    3
+Number of independent variables                                  1
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Continuous
+   PA1         PA2         PA3
+
+Observed independent variables
+   OBS
+
+Continuous latent variables
+   PAW         PAB
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   OBS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_items.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         62
+
+     Average cluster size       29.694
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     PA1          0.286      PA2          0.336      PA3          0.297
+
+
+
+SAMPLE STATISTICS
+
+NOTE:  The sample statistics for within and between refer to the
+       maximum-likelihood estimated within and between covariance
+       matrices, respectively.
+
+
+     ESTIMATED SAMPLE STATISTICS FOR WITHIN
+
+
+           Means
+              PA1           PA2           PA3           OBS
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000        15.930
+
+
+           Covariances
+              PA1           PA2           PA3           OBS
+              ________      ________      ________      ________
+ PA1            3.438
+ PA2            2.163         3.401
+ PA3            2.073         2.171         3.205
+ OBS           -0.069         0.022        -0.239        89.731
+
+
+           Correlations
+              PA1           PA2           PA3           OBS
+              ________      ________      ________      ________
+ PA1            1.000
+ PA2            0.633         1.000
+ PA3            0.624         0.658         1.000
+ OBS           -0.004         0.001        -0.014         1.000
+
+
+     ESTIMATED SAMPLE STATISTICS FOR BETWEEN
+
+
+           Means
+              PA1           PA2           PA3           OBS
+              ________      ________      ________      ________
+ 1              5.236         4.799         5.010         0.000
+
+
+           Covariances
+              PA1           PA2           PA3           OBS
+              ________      ________      ________      ________
+ PA1            1.378
+ PA2            1.314         1.718
+ PA3            1.230         1.455         1.357
+ OBS            0.000         0.000         0.000         0.000
+
+
+           Correlations
+              PA1           PA2           PA3           OBS
+              ________      ________      ________      ________
+ PA1            1.000
+ PA2            0.854         1.000
+ PA3            0.900         0.953         1.000
+ OBS            0.000         0.000         0.000         0.000
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     PA1                   5.198      -0.128       0.000    1.90%       3.000      5.000      5.000
+            1841.000       4.763      -0.442      10.000    2.72%       6.000      7.000
+     PA2                   4.750       0.190       0.000    2.66%       3.000      4.000      5.000
+            1841.000       5.058      -0.359      10.000    2.99%       5.000      7.000
+     PA3                   4.981       0.073       0.000    1.68%       3.000      4.000      5.000
+            1841.000       4.499      -0.312      10.000    2.66%       6.000      7.000
+     OBS                  15.930       0.268       1.000    3.37%       6.000     12.000     15.000
+            1841.000      89.731      -0.846      42.000    0.05%      18.000     25.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     WARNING:  THE LATENT VARIABLE COVARIANCE MATRIX (PSI) IS NOT POSITIVE
+     DEFINITE.  THIS COULD INDICATE A NEGATIVE VARIANCE/RESIDUAL VARIANCE FOR A
+     LATENT VARIABLE, A CORRELATION GREATER OR EQUAL TO ONE BETWEEN TWO LATENT
+     VARIABLES, OR A LINEAR DEPENDENCY AMONG MORE THAN TWO LATENT VARIABLES.
+     CHECK THE TECH4 OUTPUT FOR MORE INFORMATION.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       18
+
+Loglikelihood
+
+          H0 Value                      -10227.572
+          H0 Scaling Correction Factor      2.3258
+            for MLR
+          H1 Value                      -10227.572
+          H1 Scaling Correction Factor      2.3258
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   20491.145
+          Bayesian (BIC)                 20590.470
+          Sample-Size Adjusted BIC       20533.284
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           1.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           1363.661
+          Degrees of Freedom                     9
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.000
+          Value for Between                  0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ PAW      BY
+    PA1                1.437      0.079     18.285      0.000
+    PA2                1.505      0.081     18.498      0.000
+    PA3                1.442      0.070     20.519      0.000
+
+ PA1        ON
+    OBS               -0.001      0.005     -0.154      0.877
+
+ PA2        ON
+    OBS                0.000      0.007      0.034      0.973
+
+ PA3        ON
+    OBS               -0.003      0.006     -0.448      0.654
+
+ Variances
+    PAW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    PA1                1.373      0.137     10.041      0.000
+    PA2                1.135      0.113     10.067      0.000
+    PA3                1.124      0.136      8.245      0.000
+
+Between Level
+
+ PAB      BY
+    PA1                1.054      0.168      6.271      0.000
+    PA2                1.247      0.181      6.890      0.000
+    PA3                1.167      0.169      6.898      0.000
+
+ Intercepts
+    PA1                5.248      0.157     33.359      0.000
+    PA2                4.795      0.207     23.154      0.000
+    PA3                5.052      0.173     29.156      0.000
+
+ Variances
+    PAB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    PA1                0.267      0.069      3.854      0.000
+    PA2                0.164      0.060      2.720      0.007
+    PA3               -0.005      0.043     -0.127      0.899
+
+New/Additional Parameters
+    OMEGA              0.841      0.013     66.335      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.144E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  11:55:21
+        Ending Time:  11:55:21
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

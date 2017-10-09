@@ -1,0 +1,29 @@
+TITLE:    Power reliability;
+
+! Syntax adapted from Bolger & Laurenceau (2013, p. 139)
+
+DATA:     FILE IS epa_items.csv;
+VARIABLE: NAMES ARE id obs ex1 ex2 ex3 ex4 ex5 ex6
+pa1 pa2 pa3 pow1 pow2 cont1 cont2 cont3;
+USEVAR = pow1 pow2 obs;
+WITHIN = obs;
+CLUSTER = id;
+ANALYSIS: TYPE = TWOLEVEL ;
+PROCESSORS=4;
+MODEL:    %WITHIN%
+            Poww by
+          pow1* (a)
+          pow2 (b);
+          pow1 pow2(c-d);
+          Poww@1;
+          pow1 pow2 on obs;
+          %BETWEEN%
+            Powb by
+            pow1*
+            pow2 ;
+            Powb@1;
+            pow1 pow2 ;
+          MODEL CONSTRAINT:
+            new (omega);
+            omega=((a+b)**2)/((a+b)**2 + (c+d));
+OUTPUT:   sampstat;

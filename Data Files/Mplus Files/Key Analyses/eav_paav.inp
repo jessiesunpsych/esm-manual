@@ -1,0 +1,36 @@
+TITLE:      Do extraverted states across the week predict PA states across the week?
+
+DATA:       FILE IS epa_example.csv;
+
+VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+            MISSING ARE *;
+
+            USEVARIABLES ARE id e pa;
+
+            ! e and pa are not specified as between or within because they have
+            ! both between and within components
+
+            CLUSTER = id;
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+MODEL:      %WITHIN%
+            e pa;
+            s | pa ON e;
+            
+       
+            %BETWEEN%
+            e pa;
+            pa ON e (c); ! call this slope c
+            [s] (w); ! intercept of the slope; call it w
+
+MODEL CONSTRAINT: ! computing a new parameter
+            NEW (b);
+            b = c + w;
+
+           
+
+
+OUTPUT:     TECH1 TECH8 CINTERVAL;

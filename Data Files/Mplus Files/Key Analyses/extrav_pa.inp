@@ -1,0 +1,25 @@
+TITLE:      Does trait extraversion predict PA states across the week?
+
+DATA:       FILE IS epa_example2.csv;
+
+VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+            MISSING ARE *;
+
+            USEVARIABLES ARE id extrav pa;
+
+            BETWEEN ARE extrav;
+
+            CLUSTER = id;
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+MODEL:      %WITHIN%
+            pa;
+       
+            %BETWEEN%
+            extrav;
+            pa ON extrav;
+
+OUTPUT:     TECH1 TECH8 CINTERVAL;

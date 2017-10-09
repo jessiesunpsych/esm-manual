@@ -1,0 +1,42 @@
+TITLE:      Do E & PA co-vary within-person?
+
+DATA:       FILE IS epa_example.csv; ! Name of the file
+
+VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+			! Variable names for each column of the .csv file
+			! extrav = trait E standardised
+			! est, past, powst, contst are centred state measures of extraversion, PA, power
+			! & contribution
+			! timeel = standardised time elapsed since participant's first report
+			! social & semi are effect coded variables for situational effects
+
+            MISSING ARE *;
+            
+            ! Set missing value here. If it's an asterix, you're done.
+            ! But you can also change it to for example, (-99)
+
+            USEVARIABLES ARE id timeel est past social semi;
+          
+            ! Variables being used in the analysis            
+
+            WITHIN ARE est past timeel social semi;
+
+			! Within-person variables
+
+            CLUSTER = id;
+           	
+           	! Clustering variable; in this case, the participant
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+MODEL:      %WITHIN%
+            s | past on est; ! regress state PA on state extraversion
+                 
+            ! s denotes the slope, but you can name this anything.
+            ! | means model the slope so it has a mean & variance (i.e., random slope).
+            
+            past ON timeel social semi; ! control for timecourse and situation
+
+OUTPUT:     TECH1 TECH8 CINTERVAL;

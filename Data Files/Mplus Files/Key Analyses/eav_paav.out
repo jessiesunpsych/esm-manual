@@ -1,0 +1,468 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+02/29/2016  11:29 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:      Do extraverted states across the week predict PA states across the week?
+
+  DATA:       FILE IS epa_example.csv;
+
+  VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+              MISSING ARE *;
+
+              USEVARIABLES ARE id e pa;
+
+              ! e and pa are not specified as between or within because they have
+              ! both between and within components
+
+              CLUSTER = id;
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+  MODEL:      %WITHIN%
+              e pa;
+              s | pa ON e;
+
+
+              %BETWEEN%
+              e pa;
+              pa ON e (c); ! call this slope c
+              [s] (w); ! intercept of the slope; call it w
+
+  MODEL CONSTRAINT: ! computing a new parameter
+              NEW (b);
+              b = c + w;
+
+
+
+
+  OUTPUT:     TECH1 TECH8 CINTERVAL;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Do extraverted states across the week predict PA states across the week?
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    1
+Number of independent variables                                  1
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Continuous
+   PA
+
+Observed independent variables
+   E
+
+Continuous latent variables
+   S
+
+Variables with special functions
+
+  Cluster variable      ID
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_example2.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              PA            E
+              ________      ________
+ PA             1.000
+ E              1.000         1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        9
+
+Loglikelihood
+
+          H0 Value                       -7165.070
+
+Information Criteria
+
+          Akaike (AIC)                   14348.140
+          Bayesian (BIC)                 14397.803
+          Sample-Size Adjusted BIC       14369.210
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    E                  4.211      0.141     29.822      0.000
+
+ Residual Variances
+    PA                 1.612      0.055     29.052      0.000
+
+Between Level
+
+ PA         ON
+    E                  0.261      0.212      1.230      0.219
+
+ Means
+    E                  4.347      0.114     38.161      0.000
+    S                  0.443      0.022     19.910      0.000
+
+ Intercepts
+    PA                 1.945      0.926      2.100      0.036
+
+ Variances
+    E                  0.657      0.145      4.537      0.000
+    S                  0.015      0.005      3.221      0.001
+
+ Residual Variances
+    PA                 1.277      0.280      4.555      0.000
+
+New/Additional Parameters
+    B                  0.703      0.212      3.324      0.001
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.198E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ Variances
+    E                3.847       3.934       3.979       4.211       4.443       4.488       4.575
+
+ Residual Variances
+    PA               1.469       1.503       1.521       1.612       1.703       1.721       1.755
+
+Between Level
+
+ PA       ON
+    E               -0.285      -0.155      -0.088       0.261       0.610       0.676       0.807
+
+ Means
+    E                4.053       4.124       4.159       4.347       4.534       4.570       4.640
+    S                0.385       0.399       0.406       0.443       0.479       0.486       0.500
+
+ Intercepts
+    PA              -0.441       0.129       0.421       1.945       3.469       3.761       4.332
+
+ Variances
+    E                0.284       0.373       0.419       0.657       0.896       0.941       1.031
+    S                0.003       0.006       0.007       0.015       0.023       0.025       0.027
+
+ Residual Variances
+    PA               0.555       0.728       0.816       1.277       1.738       1.827       1.999
+
+New/Additional Parameters
+    B                0.158       0.289       0.355       0.703       1.051       1.118       1.248
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              PA            E
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              S             PA            E
+              ________      ________      ________
+ PA                 0             0             0
+ E                  0             0             0
+
+
+           THETA
+              PA            E
+              ________      ________
+ PA                 0
+ E                  0             0
+
+
+           ALPHA
+              S             PA            E
+              ________      ________      ________
+ 1                  0             0             0
+
+
+           BETA
+              S             PA            E
+              ________      ________      ________
+ S                  0             0             0
+ PA                 0             0             0
+ E                  0             0             0
+
+
+           PSI
+              S             PA            E
+              ________      ________      ________
+ S                  0
+ PA                 0             1
+ E                  0             0             2
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              PA            E
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              S             PA            E
+              ________      ________      ________
+ PA                 0             0             0
+ E                  0             0             0
+
+
+           THETA
+              PA            E
+              ________      ________
+ PA                 0
+ E                  0             0
+
+
+           ALPHA
+              S             PA            E
+              ________      ________      ________
+ 1                  3             4             5
+
+
+           BETA
+              S             PA            E
+              ________      ________      ________
+ S                  0             0             0
+ PA                 0             0             6
+ E                  0             0             0
+
+
+           PSI
+              S             PA            E
+              ________      ________      ________
+ S                  7
+ PA                 0             8
+ E                  0             0             9
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              B
+              ________
+ 1                 10
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              PA            E
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              S             PA            E
+              ________      ________      ________
+ PA             0.000         1.000         0.000
+ E              0.000         0.000         1.000
+
+
+           THETA
+              PA            E
+              ________      ________
+ PA             0.000
+ E              0.000         0.000
+
+
+           ALPHA
+              S             PA            E
+              ________      ________      ________
+ 1              0.000         0.000         0.000
+
+
+           BETA
+              S             PA            E
+              ________      ________      ________
+ S              0.000         0.000         0.000
+ PA             0.000         0.000         0.000
+ E              0.000         0.000         0.000
+
+
+           PSI
+              S             PA            E
+              ________      ________      ________
+ S              0.000
+ PA             0.000         1.929
+ E              0.000         0.000         2.426
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              PA            E
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              S             PA            E
+              ________      ________      ________
+ PA             0.000         1.000         0.000
+ E              0.000         0.000         1.000
+
+
+           THETA
+              PA            E
+              ________      ________
+ PA             0.000
+ E              0.000         0.000
+
+
+           ALPHA
+              S             PA            E
+              ________      ________      ________
+ 1              0.000         4.976         4.346
+
+
+           BETA
+              S             PA            E
+              ________      ________      ________
+ S              0.000         0.000         0.000
+ PA             0.000         0.000         0.000
+ E              0.000         0.000         0.000
+
+
+           PSI
+              S             PA            E
+              ________      ________      ________
+ S              1.000
+ PA             0.000         1.929
+ E              0.000         0.000         2.426
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              B
+              ________
+ 1              0.500
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.74902104D+04    0.0000000    0.0000000  EM
+              2 -0.71779237D+04  312.2866441    0.0416926  EM
+              3 -0.71681917D+04    9.7320641    0.0013558  EM
+              4 -0.71661110D+04    2.0806625    0.0002903  EM
+              5 -0.71654683D+04    0.6426984    0.0000897  EM
+              6 -0.71652346D+04    0.2337614    0.0000326  EM
+              7 -0.71651413D+04    0.0933065    0.0000130  EM
+              8 -0.71651018D+04    0.0394459    0.0000055  EM
+              9 -0.71650845D+04    0.0173047    0.0000024  EM
+             10 -0.71650767D+04    0.0077777    0.0000011  EM
+             11 -0.71650732D+04    0.0035527    0.0000005  EM
+             12 -0.71650715D+04    0.0016405    0.0000002  EM
+             13 -0.71650708D+04    0.0007631    0.0000001  EM
+             14 -0.71650704D+04    0.0003567    0.0000000  EM
+             15 -0.71650702D+04    0.0001673    0.0000000  EM
+             16 -0.71650702D+04    0.0000786    0.0000000  EM
+             17 -0.71650701D+04    0.0000370    0.0000000  EM
+             18 -0.71650701D+04    0.0000175    0.0000000  EM
+             19 -0.71650701D+04    0.0000082    0.0000000  EM
+             20 -0.71650701D+04    0.0000039    0.0000000  EM
+             21 -0.71650701D+04    0.0000018    0.0000000  EM
+             22 -0.71650701D+04    0.0000009    0.0000000  EM
+             23 -0.71650701D+04    0.0000004    0.0000000  EM
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  11:29:03
+        Ending Time:  11:29:03
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

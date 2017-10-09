@@ -1,0 +1,698 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+06/14/2016  12:46 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:      Does trait E moderate the e-pa relation?
+
+  DATA:       FILE IS epa_example.csv; ! Name of the file
+
+  VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst
+               timeel social semi;
+
+              MISSING ARE *;
+
+              USEVARIABLES ARE id timeel est past social semi extrav;
+
+              WITHIN ARE est past timeel social semi; ! Level 1 variables
+              BETWEEN ARE extrav; ! Level 2 variables
+
+              CLUSTER = id;
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+  MODEL:      %WITHIN%
+              s | past on est;
+              past ON timeel social semi;
+
+             %BETWEEN%
+              s on extrav; ! Regressing e-pa slope onto extrav
+              ! i.e., does trait E significantly predict the e-pa slope?
+
+  OUTPUT:     TECH1 TECH8 CINTERVAL;
+
+
+
+*** WARNING in MODEL command
+  Variable on the left-hand side of an ON statement in a | statement is a
+  WITHIN variable.  The intercept for this variable is not random.
+  Variable:  PAST
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Does trait E moderate the e-pa relation?
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    1
+Number of independent variables                                  5
+Number of continuous latent variables                            1
+
+Observed dependent variables
+
+  Continuous
+   PAST
+
+Observed independent variables
+   TIMEEL      EST         SOCIAL      SEMI        EXTRAV
+
+Continuous latent variables
+   S
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   TIMEEL      EST         PAST        SOCIAL      SEMI
+
+  Between variables
+   EXTRAV
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_example.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST           1.000
+ TIMEEL         1.000         1.000
+ EST            1.000         1.000         1.000
+ SOCIAL         1.000         1.000         1.000         1.000
+ SEMI           1.000         1.000         1.000         1.000         1.000
+ EXTRAV         1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              EXTRAV
+              ________
+ EXTRAV         1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        8
+
+Loglikelihood
+
+          H0 Value                       -3036.509
+
+Information Criteria
+
+          Akaike (AIC)                    6089.018
+          Bayesian (BIC)                  6133.162
+          Sample-Size Adjusted BIC        6107.747
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ PAST       ON
+    TIMEEL             0.006      0.029      0.198      0.843
+    SOCIAL            -0.032      0.053     -0.608      0.543
+    SEMI              -0.081      0.044     -1.861      0.063
+
+ Intercepts
+    PAST               0.002      0.029      0.082      0.935
+
+ Residual Variances
+    PAST               1.529      0.051     29.868      0.000
+
+Between Level
+
+ S          ON
+    EXTRAV            -0.018      0.027     -0.658      0.510
+
+ Intercepts
+    S                  0.459      0.030     15.391      0.000
+
+ Residual Variances
+    S                  0.027      0.007      3.669      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.215E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ PAST     ON
+    TIMEEL          -0.070      -0.052      -0.042       0.006       0.054       0.063       0.081
+    SOCIAL          -0.169      -0.136      -0.119      -0.032       0.055       0.072       0.104
+    SEMI            -0.194      -0.167      -0.153      -0.081      -0.009       0.004       0.031
+
+ Intercepts
+    PAST            -0.073      -0.055      -0.046       0.002       0.050       0.060       0.078
+
+ Residual Variances
+    PAST             1.397       1.429       1.445       1.529       1.613       1.630       1.661
+
+Between Level
+
+ S        ON
+    EXTRAV          -0.087      -0.070      -0.062      -0.018       0.026       0.035       0.051
+
+ Intercepts
+    S                0.382       0.400       0.410       0.459       0.508       0.517       0.535
+
+ Residual Variances
+    S                0.008       0.013       0.015       0.027       0.039       0.041       0.046
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              EXTRAV
+              ________
+ 1                  0
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           LAMBDA
+              SEMI          EXTRAV
+              ________      ________
+ PAST               0             0
+ TIMEEL             0             0
+ EST                0             0
+ SOCIAL             0             0
+ SEMI               0             0
+ EXTRAV             0             0
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST               0
+ TIMEEL             0             0
+ EST                0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           THETA
+              EXTRAV
+              ________
+ EXTRAV             0
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  0             1             0             0             0
+
+
+           ALPHA
+              SEMI          EXTRAV
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  0             0             0             0             0
+ PAST               0             0             2             0             3
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           BETA
+              SEMI          EXTRAV
+              ________      ________
+ S                  0             0
+ PAST               4             0
+ TIMEEL             0             0
+ EST                0             0
+ SOCIAL             0             0
+ SEMI               0             0
+ EXTRAV             0             0
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  0
+ PAST               0             5
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           PSI
+              SEMI          EXTRAV
+              ________      ________
+ SEMI               0
+ EXTRAV             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              EXTRAV
+              ________
+ 1                  0
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           LAMBDA
+              SEMI          EXTRAV
+              ________      ________
+ PAST               0             0
+ TIMEEL             0             0
+ EST                0             0
+ SOCIAL             0             0
+ SEMI               0             0
+ EXTRAV             0             0
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST               0
+ TIMEEL             0             0
+ EST                0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           THETA
+              EXTRAV
+              ________
+ EXTRAV             0
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  6             0             0             0             0
+
+
+           ALPHA
+              SEMI          EXTRAV
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  0             0             0             0             0
+ PAST               0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           BETA
+              SEMI          EXTRAV
+              ________      ________
+ S                  0             7
+ PAST               0             0
+ TIMEEL             0             0
+ EST                0             0
+ SOCIAL             0             0
+ SEMI               0             0
+ EXTRAV             0             0
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S                  8
+ PAST               0             0
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+ EXTRAV             0             0             0             0             0
+
+
+           PSI
+              SEMI          EXTRAV
+              ________      ________
+ SEMI               0
+ EXTRAV             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              EXTRAV
+              ________
+ 1              0.000
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000         1.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         1.000         0.000         0.000
+ EST            0.000         0.000         0.000         1.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         1.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              SEMI          EXTRAV
+              ________      ________
+ PAST           0.000         0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000
+ SOCIAL         0.000         0.000
+ SEMI           1.000         0.000
+ EXTRAV         0.000         1.000
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              EXTRAV
+              ________
+ EXTRAV         0.000
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              SEMI          EXTRAV
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              SEMI          EXTRAV
+              ________      ________
+ S              0.000         0.000
+ PAST           0.000         0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000
+ SOCIAL         0.000         0.000
+ SEMI           0.000         0.000
+ EXTRAV         0.000         0.000
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              0.000
+ PAST           0.000         1.227
+ TIMEEL         0.000         0.000         0.500
+ EST            0.000         0.000         0.000         2.034
+ SOCIAL         0.000         0.000         0.000         0.000         0.345
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              SEMI          EXTRAV
+              ________      ________
+ SEMI           0.305
+ EXTRAV         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              EXTRAV
+              ________
+ 1              0.000
+
+
+           LAMBDA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000         1.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         1.000         0.000         0.000
+ EST            0.000         0.000         0.000         1.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         1.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              SEMI          EXTRAV
+              ________      ________
+ PAST           0.000         0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000
+ SOCIAL         0.000         0.000
+ SEMI           1.000         0.000
+ EXTRAV         0.000         1.000
+
+
+           THETA
+              PAST          TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              EXTRAV
+              ________
+ EXTRAV         0.000
+
+
+           ALPHA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              SEMI          EXTRAV
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              SEMI          EXTRAV
+              ________      ________
+ S              0.000         0.000
+ PAST           0.000         0.000
+ TIMEEL         0.000         0.000
+ EST            0.000         0.000
+ SOCIAL         0.000         0.000
+ SEMI           0.000         0.000
+ EXTRAV         0.000         0.000
+
+
+           PSI
+              S             PAST          TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ S              1.000
+ PAST           0.000         0.000
+ TIMEEL         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+ EXTRAV         0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              SEMI          EXTRAV
+              ________      ________
+ SEMI           0.000
+ EXTRAV         0.000         0.463
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.31374756D+04    0.0000000    0.0000000  EM
+              2 -0.30409373D+04   96.5382987    0.0307694  EM
+              3 -0.30375038D+04    3.4334717    0.0011291  EM
+              4 -0.30367863D+04    0.7175243    0.0002362  EM
+              5 -0.30365943D+04    0.1919911    0.0000632  EM
+              6 -0.30365367D+04    0.0575877    0.0000190  EM
+              7 -0.30365183D+04    0.0184009    0.0000061  EM
+              8 -0.30365122D+04    0.0061218    0.0000020  EM
+              9 -0.30365101D+04    0.0020984    0.0000007  EM
+             10 -0.30365094D+04    0.0007376    0.0000002  EM
+             11 -0.30365091D+04    0.0002654    0.0000001  EM
+             12 -0.30365090D+04    0.0000977    0.0000000  EM
+             13 -0.30365090D+04    0.0000367    0.0000000  EM
+             14 -0.30365090D+04    0.0000142    0.0000000  EM
+             15 -0.30365090D+04    0.0000055    0.0000000  EM
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  12:46:28
+        Ending Time:  12:46:28
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

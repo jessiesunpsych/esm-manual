@@ -1,0 +1,473 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+06/14/2016  11:53 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:    Extraversion reliability;
+
+  ! Syntax adapted from Bolger & Laurenceau (2013, p. 139)
+
+  DATA:     FILE IS epa_items.csv;
+  VARIABLE: NAMES ARE id obs ex1 ex2 ex3 ex4 ex5 ex6
+  pa1 pa2 pa3 pow1 pow2 cont1 cont2 cont3;
+
+  ! Variable names for each column of the .csv file
+
+  USEVAR = ex1 ex2 ex3 ex4 ex5 ex6 obs;
+
+  ! Variables used in this analysis
+
+  WITHIN = obs;
+  CLUSTER = id;
+  missing are *;
+  ANALYSIS: TYPE = TWOLEVEL ;
+  PROCESSORS=4;
+  MODEL:    %WITHIN%
+              Ew by
+            ex1 * (a)
+            ex2 ex3 ex4 ex5 ex6 (b-f);
+
+  ! Ew is the name of the within-person extraversion factor
+  ! ex1* specifies that the extraversion Item 1 loads on Ew with a loading that is estimated
+  ! and assigned the label of a
+  ! (These labels (a,b,c, etc.) are used in the calculation of coefficient omega below)
+  ! ex2 ex3 ex4 ex5 ex6 (b-f) specifies that items 2-6 load on the Ew factor
+
+            ex1 ex2 ex3 ex4 ex5 ex6 (g-l);
+
+  ! Gives labels g, h, i, j, k, l to the error variances of Items 1, 2, 3, 4, 5, 6 respectiv
+
+            Ew@1; ! fixes the variance of the factor to be 1.0
+
+            ex1 ex2 ex3 ex4 ex5 ex6 on obs;
+
+            %BETWEEN%
+              Eb by
+              ex1*
+              ex2 ex3 ex4 ex5 ex6;
+              Eb@1;
+              ex1 ex2 ex3 ex4 ex5 ex6 ;
+
+            MODEL CONSTRAINT:
+              new (omega);
+              omega=((a+b+c+d+e+f)**2)/((a+b+c+d+e+f)**2 + (g+h+i+j+k+l));
+
+  ! Uses estimates of the labeled parameters to calculate omega for the within-person part o
+
+  OUTPUT:   sampstat;
+
+
+
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+  ! Gives labels g, h, i, j, k, l to the error variances of Items 1, 2, 3, 4, 5, 6 respective
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+  ! Uses estimates of the labeled parameters to calculate omega for the within-person part of
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Extraversion reliability;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    6
+Number of independent variables                                  1
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Continuous
+   EX1         EX2         EX3         EX4         EX5         EX6
+
+Observed independent variables
+   OBS
+
+Continuous latent variables
+   EW          EB
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   OBS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_items.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+     Average cluster size       29.694
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     EX1          0.104      EX2          0.247      EX3          0.277
+     EX4          0.050      EX5          0.156      EX6          0.206
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ EX1            1.000
+ EX2            1.000         1.000
+ EX3            1.000         1.000         1.000
+ EX4            1.000         1.000         1.000         1.000
+ EX5            1.000         1.000         1.000         1.000         1.000
+ EX6            1.000         1.000         1.000         1.000         1.000
+ OBS            1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              EX6           OBS
+              ________      ________
+ EX6            1.000
+ OBS            1.000         1.000
+
+
+SAMPLE STATISTICS
+
+NOTE:  The sample statistics for within and between refer to the
+       maximum-likelihood estimated within and between covariance
+       matrices, respectively.
+
+
+     ESTIMATED SAMPLE STATISTICS FOR WITHIN
+
+
+           Means
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           Means
+              EX6           OBS
+              ________      ________
+ 1              0.000        15.930
+
+
+           Covariances
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ EX1            8.061
+ EX2            4.135         4.832
+ EX3            4.050         3.515         4.619
+ EX4            6.857         4.024         3.906         8.170
+ EX5            5.076         3.457         3.354         4.959         5.423
+ EX6            3.484         2.251         2.167         3.687         2.967
+ OBS            0.603         0.653         0.065        -0.009         0.303
+
+
+           Covariances
+              EX6           OBS
+              ________      ________
+ EX6            4.744
+ OBS           -1.228        89.731
+
+
+           Correlations
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ EX1            1.000
+ EX2            0.663         1.000
+ EX3            0.664         0.744         1.000
+ EX4            0.845         0.640         0.636         1.000
+ EX5            0.768         0.675         0.670         0.745         1.000
+ EX6            0.563         0.470         0.463         0.592         0.585
+ OBS            0.022         0.031         0.003         0.000         0.014
+
+
+           Correlations
+              EX6           OBS
+              ________      ________
+ EX6            1.000
+ OBS           -0.060         1.000
+
+
+     ESTIMATED SAMPLE STATISTICS FOR BETWEEN
+
+
+           Means
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ 1              4.259         4.378         4.308         4.203         4.299
+
+
+           Means
+              EX6           OBS
+              ________      ________
+ 1              4.650         0.000
+
+
+           Covariances
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ EX1            0.931
+ EX2            0.714         1.586
+ EX3            0.610         1.335         1.770
+ EX4            0.518         0.414         0.378         0.433
+ EX5            0.759         0.837         0.772         0.388         1.001
+ EX6            0.392         0.276         0.256         0.459         0.275
+ OBS            0.000         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              EX6           OBS
+              ________      ________
+ EX6            1.231
+ OBS            0.000         0.000
+
+
+           Correlations
+              EX1           EX2           EX3           EX4           EX5
+              ________      ________      ________      ________      ________
+ EX1            1.000
+ EX2            0.587         1.000
+ EX3            0.475         0.797         1.000
+ EX4            0.815         0.499         0.431         1.000
+ EX5            0.786         0.664         0.580         0.590         1.000
+ EX6            0.366         0.198         0.173         0.629         0.248
+ OBS            0.000         0.000         0.000         0.000         0.000
+
+
+           Correlations
+              EX6           OBS
+              ________      ________
+ EX6            1.000
+ OBS            0.000         0.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -21654.929
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     EX1                   4.262       0.034       0.000   15.54%       1.000      3.000      4.000
+            1841.000       8.985      -1.260      10.000    2.82%       6.000      7.000
+     EX2                   4.368      -0.042       0.000    9.72%       2.000      4.000      4.000
+            1841.000       6.353      -0.727      10.000    2.17%       5.000      7.000
+     EX3                   4.315      -0.066       0.000   10.27%       2.000      4.000      4.000
+            1841.000       6.308      -0.780      10.000    1.63%       5.000      7.000
+     EX4                   4.206       0.162       0.000   12.66%       1.000      3.000      4.000
+            1841.000       8.595      -1.188      10.000    2.99%       5.000      7.000
+     EX5                   4.285      -0.007       0.000    9.51%       2.000      3.000      4.000
+            1841.000       6.431      -0.858      10.000    1.58%       5.000      7.000
+     EX6                   4.637       0.029       0.000    5.32%       2.000      4.000      5.000
+            1841.000       5.921      -0.707      10.000    2.34%       5.000      7.000
+     OBS                  15.930       0.268       1.000    3.37%       6.000     12.000     15.000
+            1841.000      89.731      -0.846      42.000    0.05%      18.000     25.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       36
+
+Loglikelihood
+
+          H0 Value                      -21921.769
+          H0 Scaling Correction Factor      3.4557
+            for MLR
+          H1 Value                      -21654.929
+          H1 Scaling Correction Factor      2.6262
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   43915.538
+          Bayesian (BIC)                 44114.188
+          Sample-Size Adjusted BIC       43999.817
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                            551.761*
+          Degrees of Freedom                    18
+          P-Value                           0.0000
+          Scaling Correction Factor         0.9672
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.127
+
+CFI/TLI
+
+          CFI                                0.807
+          TLI                                0.614
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           2800.783
+          Degrees of Freedom                    36
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.036
+          Value for Between                  0.156
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ EW       BY
+    EX1                2.606      0.079     33.192      0.000
+    EX2                1.689      0.105     16.071      0.000
+    EX3                1.646      0.109     15.155      0.000
+    EX4                2.577      0.080     32.112      0.000
+    EX5                2.008      0.082     24.352      0.000
+    EX6                1.421      0.107     13.251      0.000
+
+ EX1        ON
+    OBS                0.007      0.008      0.852      0.394
+
+ EX2        ON
+    OBS                0.007      0.007      0.998      0.318
+
+ EX3        ON
+    OBS                0.001      0.007      0.134      0.893
+
+ EX4        ON
+    OBS                0.000      0.007      0.015      0.988
+
+ EX5        ON
+    OBS                0.004      0.007      0.558      0.577
+
+ EX6        ON
+    OBS               -0.013      0.006     -2.153      0.031
+
+ Variances
+    EW                 1.000      0.000    999.000    999.000
+
+ Residual Variances
+    EX1                1.412      0.196      7.205      0.000
+    EX2                2.009      0.219      9.174      0.000
+    EX3                1.943      0.240      8.091      0.000
+    EX4                1.672      0.288      5.804      0.000
+    EX5                1.464      0.173      8.470      0.000
+    EX6                2.758      0.272     10.132      0.000
+
+Between Level
+
+ EB       BY
+    EX1                0.603      0.414      1.457      0.145
+    EX2                1.144      0.213      5.370      0.000
+    EX3                1.131      0.249      4.539      0.000
+    EX4                0.343      0.308      1.111      0.267
+    EX5                0.736      0.317      2.321      0.020
+    EX6                0.186      0.362      0.512      0.609
+
+ Intercepts
+    EX1                4.150      0.180     23.054      0.000
+    EX2                4.259      0.210     20.269      0.000
+    EX3                4.293      0.217     19.753      0.000
+    EX4                4.201      0.158     26.530      0.000
+    EX5                4.241      0.160     26.429      0.000
+    EX6                4.864      0.172     28.280      0.000
+
+ Variances
+    EB                 1.000      0.000    999.000    999.000
+
+ Residual Variances
+    EX1                0.261      0.136      1.915      0.056
+    EX2                0.314      0.495      0.635      0.526
+    EX3                0.571      0.529      1.080      0.280
+    EX4                0.114      0.047      2.449      0.014
+    EX5                0.343      0.211      1.625      0.104
+    EX6                0.989      0.294      3.363      0.001
+
+! Here is the key piece of output! Omega = .927
+! Suggests that it is possible to reliably distinguish people in terms of their
+! patterns of change over time.
+
+New/Additional Parameters
+    OMEGA              0.927      0.006    164.545      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.909E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  11:53:51
+        Ending Time:  11:53:51
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,450 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+02/29/2016   9:20 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:      Does trait extraversion predict PA states across the week?
+
+  DATA:       FILE IS epa_example2.csv;
+
+  VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst timeel social semi;
+
+              MISSING ARE *;
+
+              USEVARIABLES ARE id extrav pa;
+
+              BETWEEN ARE extrav;
+
+              CLUSTER = id;
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+  MODEL:      %WITHIN%
+              pa;
+
+              %BETWEEN%
+              extrav;
+              pa ON extrav;
+
+  OUTPUT:     TECH1 TECH8 CINTERVAL;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Does trait extraversion predict PA states across the week?
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    1
+Number of independent variables                                  1
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   PA
+
+Observed independent variables
+   EXTRAV
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   EXTRAV
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_example2.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+     Average cluster size       29.694
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass
+     Variable  Correlation
+
+     PA           0.353
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         1.000
+ PA             1.000         1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                        6
+
+Loglikelihood
+
+          H0 Value                       -3597.112
+          H1 Value                       -3597.112
+
+Information Criteria
+
+          Akaike (AIC)                    7206.224
+          Bayesian (BIC)                  7239.332
+          Sample-Size Adjusted BIC        7220.270
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+
+CFI/TLI
+
+          CFI                                0.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                              0.815
+          Degrees of Freedom                     1
+          P-Value                           0.3666
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.000
+          Value for Between                  0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    PA                 2.539      0.085     29.823      0.000
+
+Between Level
+
+ PA         ON
+    EXTRAV             0.303      0.334      0.905      0.365
+
+ Means
+    EXTRAV             3.364      0.058     57.640      0.000
+
+ Intercepts
+    PA                 3.997      1.135      3.521      0.000
+
+ Variances
+    EXTRAV             0.211      0.038      5.568      0.000
+
+ Residual Variances
+    PA                 1.367      0.262      5.214      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.806E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ Variances
+    PA               2.320       2.373       2.399       2.539       2.680       2.706       2.759
+
+Between Level
+
+ PA       ON
+    EXTRAV          -0.559      -0.353      -0.247       0.303       0.853       0.958       1.164
+
+ Means
+    EXTRAV           3.213       3.249       3.268       3.364       3.460       3.478       3.514
+
+ Intercepts
+    PA               1.073       1.772       2.130       3.997       5.863       6.221       6.920
+
+ Variances
+    EXTRAV           0.113       0.137       0.149       0.211       0.274       0.285       0.309
+
+ Residual Variances
+    PA               0.692       0.853       0.936       1.367       1.799       1.881       2.043
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              EXTRAV        PA
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0             0
+ PA                 0             0
+
+
+           THETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0
+ PA                 0             0
+
+
+           ALPHA
+              EXTRAV        PA
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0             0
+ PA                 0             0
+
+
+           PSI
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0
+ PA                 0             1
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              EXTRAV        PA
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0             0
+ PA                 0             0
+
+
+           THETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0
+ PA                 0             0
+
+
+           ALPHA
+              EXTRAV        PA
+              ________      ________
+ 1                  2             3
+
+
+           BETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             0             0
+ PA                 4             0
+
+
+           PSI
+              EXTRAV        PA
+              ________      ________
+ EXTRAV             5
+ PA                 0             6
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              EXTRAV        PA
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         1.000         0.000
+ PA             0.000         1.000
+
+
+           THETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         0.000
+ PA             0.000         0.000
+
+
+           ALPHA
+              EXTRAV        PA
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         0.000         0.000
+ PA             0.000         0.000
+
+
+           PSI
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         0.000
+ PA             0.000         1.929
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              EXTRAV        PA
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         1.000         0.000
+ PA             0.000         1.000
+
+
+           THETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         0.000
+ PA             0.000         0.000
+
+
+           ALPHA
+              EXTRAV        PA
+              ________      ________
+ 1              3.359         4.976
+
+
+           BETA
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         0.000         0.000
+ PA             0.000         0.000
+
+
+           PSI
+              EXTRAV        PA
+              ________      ________
+ EXTRAV         0.099
+ PA             0.000         1.929
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.36472032D+04    0.0000000    0.0000000  EM
+              2 -0.35971679D+04   50.0352212    0.0137188  EM
+              3 -0.35971124D+04    0.0555073    0.0000154  EM
+              4 -0.35971120D+04    0.0004740    0.0000001  EM
+
+
+   TECHNICAL 8 OUTPUT FOR THE H1 MODEL
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.35976977D+04    0.0000000    0.0000000  EM
+              2 -0.35971139D+04    0.5837842    0.0001623  EM
+              3 -0.35971120D+04    0.0019357    0.0000005  EM
+              4 -0.35971120D+04    0.0000226    0.0000000  EM
+
+
+   TECHNICAL 8 OUTPUT FOR THE BASELINE MODEL
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.35975196D+04    0.0000000    0.0000000  EM
+              2 -0.35975196D+04    0.0000009    0.0000000  EM
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  09:20:12
+        Ending Time:  09:20:12
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

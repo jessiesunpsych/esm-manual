@@ -1,0 +1,54 @@
+TITLE:      Do State Social Contribution and Power Mediate the State E-PA Relation?
+
+! Syntax adapted from Bolger & Laurenceau (2013, p. 188)
+! As well as a couple of lines from the Preacher et al. supplement, Model O (pp. 10-11)
+! See https://www.statmodel.com/download/Preacher.pdf
+
+DATA:       FILE IS epa_example.csv; ! Name of the file
+
+VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+            MISSING ARE *;
+
+                USEVARIABLES ARE id timeel est past contst powst social semi;
+                    
+                WITHIN = est contst powst past timeel social semi;
+
+                CLUSTER = id;
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM;
+
+ MODEL:    %WITHIN%
+ 		   a1 | contst ON est; ! regressing M1 on X, call the random slope "a1"
+		   a2 | powst ON est; ! regressing M2 on X, call the random slope "a2"
+           b1 | past ON contst; ! regressing Y on M1, call the random slope "b1"
+		   b2 | past ON powst; ! regressing Y on M2, call the random slope "b2"
+		   cp | past ON est; ! regressing Y on X, call the random slope "cp"
+		   past contst powst ON timeel social semi; ! time & situational covariates
+		   contst WITH powst; ! estimate Level-1 residual covariance of m1 and m2
+          [contst@0 powst@0 past@0]; ! fix intercepts to 0
+          
+           %BETWEEN%      
+           cp WITH a1 b1 a2 b2;                                
+           [a1] (ma1); a1 (vara1);
+           [b1] (mb1); b1 (varb1);         
+           [a2] (ma2); a2 (vara2);
+           [b2] (mb2); b2 (varb2);
+           [cp] (mcp);
+           a1 WITH b1 (covab1);
+           a2 WITH b2 (covab2);
+
+MODEL CONSTRAINT:
+         NEW (med1 med2 te pme1 pme2 corr1 corr2);
+         med1=ma1*mb1+covab1; ! indirect effect via contribution
+    	 med2=ma2*mb2+covab2; ! indirect effect via power
+         te=med1+med2+mcp;
+         pme1=med1/te; ! percent mediated effect via contribution
+         pme2=med2/te; ! percent mediated effect via power
+         corr1=covab1/sqrt(vara1*varb1); ! correlation b/t a & b random effects for cont
+         corr2=covab2/sqrt(vara2*varb2); ! correlation b/t a & b random effects for pow
+  
+ OUTPUT:   TECH1 TECH8 CINTERVAL;
+
+ 

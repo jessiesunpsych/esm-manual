@@ -1,0 +1,41 @@
+TITLE:      Does State Social Power Mediate the State E-PA Relation?
+
+! Syntax adapted from Bolger & Laurenceau (2013, p. 188)
+
+DATA:       FILE IS epa_example.csv; ! Name of the file
+
+VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+            MISSING ARE *;
+
+                USEVARIABLES ARE id timeel est past powst social semi;
+                    
+                WITHIN = est powst past timeel social semi;
+                
+                CLUSTER = id;
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+ MODEL:    %WITHIN%
+           a | powst on est; ! regressing M on X, call the random slope "a"
+           b| past on powst; ! regressing Y on M, call the random slope "b"
+           cp| past on est; ! regressing Y on X, call the random slope "cp"
+ 		   past powst ON timeel social semi; ! time & situational covariates
+ 		   [powst@0 past@0]; ! fix the intercept to 0, as both were subject-mean centred
+       	
+           %BETWEEN%
+           cp WITH a b; ! covariances of the cp random effect w/ a & b random effects
+           [a] (ma); a (vara); ! label the mean & variance of the a slope random effect
+           [b] (mb); b (varb); ! label the mean & variance of the b slope random effect      
+           [cp] (mcp); ! labels mean of cp slope
+           a WITH b (covab); ! labels the covariance of a & b random effects as "covab"
+           
+           MODEL CONSTRAINT:
+           NEW(med te pme corr); ! creating new variables
+           med=ma*mb+covab; ! mediated (indirect) effect
+           te=med+mcp; ! total effect
+           pme=med/te; ! percent mediated effect
+           corr=covab/sqrt(vara*varb); ! covariance of a & b random effects in correlation metric     
+
+ OUTPUT:    TECH1 TECH8 CINTERVAL;

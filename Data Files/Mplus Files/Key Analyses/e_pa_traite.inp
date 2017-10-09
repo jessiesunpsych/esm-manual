@@ -1,0 +1,27 @@
+TITLE:      Does trait E moderate the e-pa relation?
+
+DATA:       FILE IS epa_example.csv; ! Name of the file
+
+VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+            MISSING ARE *;
+            
+            USEVARIABLES ARE id timeel est past social semi extrav;          
+
+            WITHIN ARE est past timeel social semi; ! Level 1 variables
+            BETWEEN ARE extrav; ! Level 2 variables
+
+            CLUSTER = id;
+
+ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+MODEL:      %WITHIN%
+            s | past on est;
+            past ON timeel social semi;
+
+           %BETWEEN%
+            s on extrav; ! Regressing e-pa slope onto extrav
+            ! i.e., does trait E significantly predict the e-pa slope?
+
+OUTPUT:     TECH1 TECH8 CINTERVAL;

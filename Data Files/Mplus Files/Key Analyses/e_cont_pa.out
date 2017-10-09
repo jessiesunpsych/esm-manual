@@ -1,0 +1,830 @@
+Mplus VERSION 7.4
+MUTHEN & MUTHEN
+01/21/2016  10:05 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:      Does State Social Contribution Mediate the State E-PA Relation?
+
+  ! Syntax adapted from Bolger & Laurenceau (2013, p. 188)
+
+  DATA:       FILE IS epa_example.csv; ! Name of the file
+
+  VARIABLE:    NAMES ARE id extrav e pa cont pow est past powst contst 
+             timeel social semi;
+
+              MISSING ARE *;
+
+                  USEVARIABLES ARE id timeel est past contst social semi;
+
+                  WITHIN = est contst past timeel social semi;
+
+                  CLUSTER = id;
+
+  ANALYSIS:   TYPE = TWOLEVEL RANDOM; ESTIMATOR=ml;
+
+   MODEL:    %WITHIN%
+             a | contst on est; ! regressing M on X, call the random slope "a"
+             b| past on contst; ! regressing Y on M, call the random slope "b"
+             cp| past on est; ! regressing Y on X, call the random slope "cp"
+   		   past contst ON timeel social semi; ! time & situational covariates
+   		   [contst@0 past@0]; ! fix the intercept to 0, as both were subject-mean centred
+         	
+             %BETWEEN%
+             cp WITH a b; ! covariances of the cp random effect w/ a & b random effects
+             [a] (ma); a (vara); ! label the mean & variance of the a slope random effect
+             [b] (mb); b (varb); ! label the mean & variance of the b slope random effect
+             [cp] (mcp); ! labels mean of cp slope
+             a WITH b (covab); ! labels the covariance of a & b random effects as "covab"
+
+             MODEL CONSTRAINT:
+             NEW(med te pme corr); ! creating new variables
+             med=ma*mb+covab; ! mediated (indirect) effect
+             te=med+mcp; ! total effect
+             pme=med/te; ! percent mediated effect
+             corr=covab/sqrt(vara*varb); ! covariance of a & b random effects in correlation
+
+   OUTPUT:    TECH1 TECH8 CINTERVAL;
+
+
+
+
+
+*** WARNING in MODEL command
+  Variable on the left-hand side of an ON statement in a | statement is a
+  WITHIN variable.  The intercept for this variable is not random.
+  Variable:  CONTST
+*** WARNING in MODEL command
+  Variable on the left-hand side of an ON statement in a | statement is a
+  WITHIN variable.  The intercept for this variable is not random.
+  Variable:  PAST
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Does State Social Contribution Mediate the State E-PA Relation?
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1841
+
+Number of dependent variables                                    2
+Number of independent variables                                  4
+Number of continuous latent variables                            3
+
+Observed dependent variables
+
+  Continuous
+   PAST        CONTST
+
+Observed independent variables
+   TIMEEL      EST         SOCIAL      SEMI
+
+Continuous latent variables
+   A           B           CP
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Within variables
+   TIMEEL      EST         PAST        CONTST      SOCIAL      SEMI
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  epa_example.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of clusters                         62
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           1.000
+ CONTST         1.000         1.000
+ TIMEEL         1.000         1.000         1.000
+ EST            1.000         1.000         1.000         1.000
+ SOCIAL         1.000         1.000         1.000         1.000         1.000
+ SEMI           1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              SEMI
+              ________
+ SEMI           1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       17
+
+Loglikelihood
+
+          H0 Value                       -6122.530
+
+Information Criteria
+
+          Akaike (AIC)                   12279.061
+          Bayesian (BIC)                 12372.868
+          Sample-Size Adjusted BIC       12318.859
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ PAST       ON
+    TIMEEL            -0.011      0.029     -0.365      0.715
+    SOCIAL            -0.054      0.051     -1.058      0.290
+    SEMI              -0.100      0.043     -2.339      0.019
+
+ CONTST     ON
+    TIMEEL             0.153      0.031      4.945      0.000
+    SOCIAL             0.137      0.055      2.487      0.013
+    SEMI               0.072      0.046      1.570      0.117
+
+ Intercepts
+    PAST               0.000      0.000    999.000    999.000
+    CONTST             0.000      0.000    999.000    999.000
+
+ Residual Variances
+    PAST               1.425      0.049     29.340      0.000
+    CONTST             1.699      0.057     29.818      0.000
+
+Between Level
+
+ CP       WITH
+    A                  0.000      0.006     -0.032      0.975
+    B                 -0.007      0.008     -0.872      0.383
+
+ A        WITH
+    B                 -0.005      0.007     -0.795      0.427
+
+ Means
+    A                  0.537      0.030     17.723      0.000
+    B                  0.206      0.032      6.396      0.000
+    CP                 0.351      0.032     11.117      0.000
+
+ Variances
+    A                  0.026      0.008      3.322      0.001
+    B                  0.028      0.011      2.488      0.013
+    CP                 0.025      0.009      2.871      0.004
+
+New/Additional Parameters
+    MED                0.106      0.019      5.665      0.000
+    TE                 0.457      0.030     15.388      0.000
+    PME                0.231      0.040      5.718      0.000
+    CORR              -0.190      0.233     -0.814      0.416
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.396E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ PAST     ON
+    TIMEEL          -0.085      -0.067      -0.058      -0.011       0.037       0.046       0.064
+    SOCIAL          -0.186      -0.154      -0.138      -0.054       0.030       0.046       0.078
+    SEMI            -0.210      -0.183      -0.170      -0.100      -0.030      -0.016       0.010
+
+ CONTST   ON
+    TIMEEL           0.073       0.092       0.102       0.153       0.203       0.213       0.232
+    SOCIAL          -0.005       0.029       0.046       0.137       0.228       0.245       0.279
+    SEMI            -0.046      -0.018      -0.003       0.072       0.148       0.162       0.191
+
+ Intercepts
+    PAST             0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    CONTST           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Residual Variances
+    PAST             1.300       1.330       1.345       1.425       1.505       1.520       1.550
+    CONTST           1.552       1.587       1.605       1.699       1.792       1.810       1.845
+
+Between Level
+
+ CP       WITH
+    A               -0.016      -0.012      -0.010       0.000       0.010       0.012       0.015
+    B               -0.027      -0.022      -0.020      -0.007       0.006       0.009       0.013
+
+ A        WITH
+    B               -0.022      -0.018      -0.016      -0.005       0.006       0.008       0.012
+
+ Means
+    A                0.459       0.478       0.488       0.537       0.587       0.597       0.616
+    B                0.123       0.143       0.153       0.206       0.259       0.269       0.289
+    CP               0.270       0.289       0.299       0.351       0.403       0.413       0.432
+
+ Variances
+    A                0.006       0.011       0.013       0.026       0.040       0.042       0.047
+    B               -0.001       0.006       0.010       0.028       0.047       0.050       0.057
+    CP               0.003       0.008       0.011       0.025       0.040       0.043       0.048
+
+New/Additional Parameters
+    MED              0.058       0.069       0.075       0.106       0.136       0.142       0.154
+    TE               0.380       0.398       0.408       0.457       0.505       0.515       0.533
+    PME              0.127       0.152       0.165       0.231       0.298       0.311       0.336
+    CORR            -0.790      -0.647      -0.573      -0.190       0.194       0.267       0.411
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              SEMI
+              ________
+ 1                  0
+
+
+           LAMBDA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ CONTST             0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST               0             0             0             0
+ CONTST             0             0             0             0
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           THETA
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0
+ CONTST             0             0
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           THETA
+              SEMI
+              ________
+ SEMI               0
+
+
+           ALPHA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A                  0             0             0             0             0
+ B                  0             0             0             0             0
+ CP                 0             0             0             0             0
+ PAST               0             0             0             0             0
+ CONTST             0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A                  0             0             0             0
+ B                  0             0             0             0
+ CP                 0             0             0             0
+ PAST               1             0             2             3
+ CONTST             4             0             5             6
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           PSI
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A                  0
+ B                  0             0
+ CP                 0             0             0
+ PAST               0             0             0             7
+ CONTST             0             0             0             0             8
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL             0
+ EST                0             0
+ SOCIAL             0             0             0
+ SEMI               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              SEMI
+              ________
+ 1                  0
+
+
+           LAMBDA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ PAST               0             0             0             0             0
+ CONTST             0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST               0             0             0             0
+ CONTST             0             0             0             0
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           THETA
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST               0
+ CONTST             0             0
+ TIMEEL             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           THETA
+              SEMI
+              ________
+ SEMI               0
+
+
+           ALPHA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ 1                  9            10            11             0             0
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A                  0             0             0             0             0
+ B                  0             0             0             0             0
+ CP                 0             0             0             0             0
+ PAST               0             0             0             0             0
+ CONTST             0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A                  0             0             0             0
+ B                  0             0             0             0
+ CP                 0             0             0             0
+ PAST               0             0             0             0
+ CONTST             0             0             0             0
+ TIMEEL             0             0             0             0
+ EST                0             0             0             0
+ SOCIAL             0             0             0             0
+ SEMI               0             0             0             0
+
+
+           PSI
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A                 12
+ B                 13            14
+ CP                15            16            17
+ PAST               0             0             0             0
+ CONTST             0             0             0             0             0
+ TIMEEL             0             0             0             0             0
+ EST                0             0             0             0             0
+ SOCIAL             0             0             0             0             0
+ SEMI               0             0             0             0             0
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL             0
+ EST                0             0
+ SOCIAL             0             0             0
+ SEMI               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              MED           TE            PME           CORR
+              ________      ________      ________      ________
+ 1                 18            19            20            21
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              SEMI
+              ________
+ 1              0.000
+
+
+           LAMBDA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         1.000         0.000
+ CONTST         0.000         0.000         0.000         0.000         1.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000
+ TIMEEL         1.000         0.000         0.000         0.000
+ EST            0.000         1.000         0.000         0.000
+ SOCIAL         0.000         0.000         1.000         0.000
+ SEMI           0.000         0.000         0.000         1.000
+
+
+           THETA
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ CONTST         0.000         0.000
+ TIMEEL         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              SEMI
+              ________
+ SEMI           0.000
+
+
+           ALPHA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000
+
+
+           PSI
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A              0.000
+ B              0.000         0.000
+ CP             0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         1.227
+ CONTST         0.000         0.000         0.000         0.000         1.630
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL         0.500
+ EST            0.000         2.034
+ SOCIAL         0.000         0.000         0.345
+ SEMI           0.000         0.000         0.000         0.305
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              SEMI
+              ________
+ 1              0.000
+
+
+           LAMBDA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         1.000         0.000
+ CONTST         0.000         0.000         0.000         0.000         1.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ PAST           0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000
+ TIMEEL         1.000         0.000         0.000         0.000
+ EST            0.000         1.000         0.000         0.000
+ SOCIAL         0.000         0.000         1.000         0.000
+ SEMI           0.000         0.000         0.000         1.000
+
+
+           THETA
+              PAST          CONTST        TIMEEL        EST           SOCIAL
+              ________      ________      ________      ________      ________
+ PAST           0.000
+ CONTST         0.000         0.000
+ TIMEEL         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              SEMI
+              ________
+ SEMI           0.000
+
+
+           ALPHA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ A              0.000         0.000         0.000         0.000
+ B              0.000         0.000         0.000         0.000
+ CP             0.000         0.000         0.000         0.000
+ PAST           0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000
+
+
+           PSI
+              A             B             CP            PAST          CONTST
+              ________      ________      ________      ________      ________
+ A              1.000
+ B              0.000         1.000
+ CP             0.000         0.000         1.000
+ PAST           0.000         0.000         0.000         0.000
+ CONTST         0.000         0.000         0.000         0.000         0.000
+ TIMEEL         0.000         0.000         0.000         0.000         0.000
+ EST            0.000         0.000         0.000         0.000         0.000
+ SOCIAL         0.000         0.000         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TIMEEL        EST           SOCIAL        SEMI
+              ________      ________      ________      ________
+ TIMEEL         0.000
+ EST            0.000         0.000
+ SOCIAL         0.000         0.000         0.000
+ SEMI           0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR THE ADDITIONAL PARAMETERS
+
+
+           NEW/ADDITIONAL PARAMETERS
+              MED           TE            PME           CORR
+              ________      ________      ________      ________
+ 1              0.500         0.500         0.500         0.500
+
+
+TECHNICAL 8 OUTPUT
+
+
+   E STEP  ITER  LOGLIKELIHOOD    ABS CHANGE   REL CHANGE  ALGORITHM
+              1 -0.63665956D+04    0.0000000    0.0000000  EM
+              2 -0.61427963D+04  223.7992647    0.0351521  EM
+              3 -0.61285716D+04   14.2247531    0.0023157  EM
+              4 -0.61248974D+04    3.6741523    0.0005995  EM
+              5 -0.61236225D+04    1.2749017    0.0002082  EM
+              6 -0.61230962D+04    0.5263467    0.0000860  EM
+              7 -0.61228496D+04    0.2465854    0.0000403  EM
+              8 -0.61227221D+04    0.1275105    0.0000208  EM
+              9 -0.61226508D+04    0.0712610    0.0000116  EM
+             10 -0.61226085D+04    0.0422856    0.0000069  EM
+             11 -0.61225823D+04    0.0262521    0.0000043  EM
+             12 -0.61225654D+04    0.0168550    0.0000028  EM
+             13 -0.61225543D+04    0.0110928    0.0000018  EM
+             14 -0.61225469D+04    0.0074356    0.0000012  EM
+             15 -0.61225419D+04    0.0050529    0.0000008  EM
+             16 -0.61225384D+04    0.0034694    0.0000006  EM
+             17 -0.61225360D+04    0.0024012    0.0000004  EM
+             18 -0.61225343D+04    0.0016723    0.0000003  EM
+             19 -0.61225331D+04    0.0011704    0.0000002  EM
+             20 -0.61225323D+04    0.0008223    0.0000001  EM
+             21 -0.61225317D+04    0.0005797    0.0000001  EM
+             22 -0.61225313D+04    0.0004097    0.0000001  EM
+             23 -0.61225310D+04    0.0002902    0.0000000  EM
+             24 -0.61225308D+04    0.0002059    0.0000000  EM
+             25 -0.61225307D+04    0.0001463    0.0000000  EM
+             26 -0.61225306D+04    0.0001041    0.0000000  EM
+             27 -0.61225305D+04    0.0000741    0.0000000  EM
+             28 -0.61225305D+04    0.0000529    0.0000000  EM
+             29 -0.61225304D+04    0.0000377    0.0000000  EM
+             30 -0.61225304D+04    0.0000269    0.0000000  EM
+             31 -0.61225304D+04    0.0000192    0.0000000  EM
+             32 -0.61225304D+04    0.0000137    0.0000000  EM
+             33 -0.61225303D+04    0.0000098    0.0000000  EM
+             34 -0.61225303D+04    0.0000070    0.0000000  EM
+             35 -0.61225303D+04    0.0000050    0.0000000  EM
+             36 -0.61225303D+04    0.0000036    0.0000000  EM
+             37 -0.61225303D+04    0.0000026    0.0000000  EM
+             38 -0.61225303D+04    0.0000018    0.0000000  EM
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  10:05:04
+        Ending Time:  10:05:05
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen
